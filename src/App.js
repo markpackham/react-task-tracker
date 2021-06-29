@@ -25,10 +25,22 @@ function App() {
   };
 
   // Add Task
-  const addTask = (task) => {
-    const id = Math.floor(Math.random() * 10000 + 1);
-    const newTask = { id, ...task };
-    setTasks([...tasks, newTask]);
+  const addTask = async (task) => {
+    const res = await fetch("http://localhost:5000/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(task),
+    });
+
+    const data = await res.json();
+
+    setTasks([...tasks, data]);
+
+    // If we have a database we can usually get them to create an id for us
+    // The odds of the id being unique are far greater than in this solution
+    // const id = Math.floor(Math.random() * 10000 + 1);
+    // const newTask = { id, ...task };
+    // setTasks([...tasks, newTask]);
   };
 
   // Delete Task
